@@ -1,8 +1,15 @@
+#include <iostream>
+#include <sstream>
+#include <stdlib.h>
+#include <list>
+
+using namespace std;
+
 struct list
 {
   int field; // поле данных
   struct list *ptr; // указатель на следующий элемент
-}
+};
 struct list * init(int a) // а- значение первого узла
 {
   struct list *lst;
@@ -91,3 +98,16 @@ struct list * swap(struct list *lst1, struct list *lst2, struct list *head)
       return(lst1);
     return(head);
 }
+int main(){
+    int n;
+
+    char op;
+
+swap(op){
+        case '+':struct list * init(int a);struct list * addelem(list *lst, int number);
+        case '-':struct list * deletelem(list *lst, list *root);
+        case '/':
+        case '=':void listprint(list *lst);
+        case 'q':exit(0);break;
+    }
+};

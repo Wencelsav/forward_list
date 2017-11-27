@@ -1,113 +1,182 @@
 #include <iostream>
-#include <sstream>
-#include <stdlib.h>
-#include <list>
-
 using namespace std;
 
-struct list
+struct data
 {
-  int field; // поле данных
-  struct list *ptr; // указатель на следующий элемент
+	int Pos;
+	int Val;
 };
-struct list * init(int a) // а- значение первого узла
-{
-  struct list *lst;
-  // выделение памяти под корень списка
-  lst = (struct list*)malloc(sizeof(struct list));
-  lst->field = a;
-  lst->ptr = NULL; // это последний узел списка
-  return(lst);
-}
-struct list * deletelem(list *lst, list *root)
-{
-  struct list *temp;
-  temp = root;
-  while (temp->ptr != lst) // просматриваем список начиная с корня
-  { // пока не найдем узел, предшествующий lst
-    temp = temp->ptr;
-  }
-  temp->ptr = lst->ptr; // переставляем указатель
-  free(lst); // освобождаем память удаляемого узла
-  return(temp);
-}
-struct list * deletehead(list *root)
-{
-  struct list *temp;
-  temp = root->ptr;
-  free(root); // освобождение памяти текущего корня
-  return(temp); // новый корень списка
-}
-void listprint(list *lst)
-{
-  struct list *p;
-  p = lst;
-  do {
-    printf("%d ", p->field); // вывод значения элемента p
-    p = p->ptr; // переход к следующему узлу
-  } while (p != NULL);
-}
 
-struct list * swap(struct list *lst1, struct list *lst2, struct list *head)
+struct List
 {
-  // Возвращает новый корень списка
-  struct list *prev1, *prev2, *next1, *next2;
-  prev1 = head;
-  prev2 = head;
-  if (prev1 == lst1)
-    prev1 = NULL;
-  else
-    while (prev1->ptr != lst1) // поиск узла предшествующего lst1
-      prev1 = prev1->ptr;
-  if (prev2 == lst2)
-    prev2 = NULL;
-  else
-    while (prev2->ptr != lst2) // поиск узла предшествующего lst2
-      prev2 = prev2->ptr;
-  next1 = lst1->ptr;  // узел следующий за lst1
-  next2 = lst2->ptr;  // узел следующий за lst2
-  if (lst2 == next1)
-  {                       // обмениваются соседние узлы
-    lst2->ptr = lst1;
-    lst1->ptr = next2;
-    if (lst1 != head)
-      prev1->ptr = lst2;
-  }
-  else
-    if (lst1 == next2)
-    {
-      // обмениваются соседние узлы
-      lst1->ptr = lst2;
-      lst2->ptr = next1;
-      if (lst2 != head)
-        prev2->ptr = lst2;
-    }
-    else
-    {
-      // обмениваются отстоящие узлы
-      if (lst1 != head)
-        prev1->ptr = lst2;
-      lst2->ptr = next1;
-      if (lst2 != head)
-        prev2->ptr = lst1;
-      lst1->ptr = next2;
-    }
-    if (lst1 == head)
-      return(lst2);
-    if (lst2 == head)
-      return(lst1);
-    return(head);
-}
-int main(){
-    int n;
-
-    char op;
-
-swap(op){
-        case '+':struct list * init(int a);struct list * addelem(list *lst, int number);
-        case '-':struct list * deletelem(list *lst, list *root);
-        case '/':
-        case '=':void listprint(list *lst);
-        case 'q':exit(0);break;
-    }
+	data data_of_el;
+	List *next;
 };
+
+int Add_to_beginning(int Pos, int Val, List **First)   //добавление в начало
+{
+	List *el = new List;
+	el->data_of_el.Pos = Pos;
+	el->data_of_el.Val = Val;
+	el->next = *First;
+	*First = el;
+	return 0;
+}
+int Add_to_end(int Pos, int Val, List **First)   // добавление в конец
+{
+	List *semisemi = *First;
+	List *el = new List;
+	el->data_of_el.Pos = Pos;
+	el->data_of_el.Val = Val;
+	while ((semisemi) && (Pos > semisemi->next->data_of_el.Pos))
+	{
+		semisemi = semisemi->next;
+	}
+	semisemi->next = el;
+	return 0;
+
+}
+int Add_between(int Pos, int Val, List **First)     //добавление между элементами
+{
+	List *semisemi = *First;
+	List *el = new List;
+	el->data_of_el.Pos = Pos;
+	el->data_of_el.Val = Val;
+	while ((semisemi) && (Pos > semisemi->data_of_el.Pos))
+	{
+		semisemi = semisemi->next;
+	}
+	el = semisemi->next;
+	semisemi->next = el;
+	while ((Pos == semisemi->next->next->data_of_el.Pos) && (!semisemi->next->next->next))
+	{
+		semisemi->next->next->data_of_el.Pos++;
+		semisemi->next->next = semisemi->next->next->next;
+	}
+	return 0;
+}
+int Delete_el(int Pos, List **First)     //удалить элемент
+{
+	if (!*First)
+	{
+		return 0;
+	}
+	List *semi = *First;
+	while ((Pos > semi->data_of_el.Pos) && (!semi->next))
+	{
+		semi = semi->next;
+	}
+	if (Pos = semi->data_of_el.Pos)
+	{
+		if (semi == *First)         //начало
+		{
+			*First = semi->next;
+			delete semi;
+			return 0;
+		}
+		if (!semi->next)            //конец
+		{
+			semi = *First;
+			while (!semi->next->next)
+			{
+				semi = semi->next;
+			}
+			delete(semi->next);
+			semi->next = 0;
+			return 0;
+		}
+		semi = *First;
+		while (Pos > semi->next->data_of_el.Pos)
+		{
+			semi = semi->next;
+		}
+		semi->next = semi->next->next;
+		List *semisemi = semi->next->next;
+		delete (semi->next);
+		semi->next = semisemi;
+		return 0;
+	}
+	cout << "Element with this Position not exist\n";
+	return 0;
+}
+int ShowList(List **First)     // вывести список
+{
+	List *show = *First;
+	if (!show)
+	{
+		cout << " List is empty \n";
+		return 0;
+	}
+	cout << " Position\t Value\n";
+	while (show)
+	{
+		cout << show->data_of_el.Pos << "\t" << show->data_of_el.Val << "\n";
+
+		show = show->next;
+	}
+	return 0;
+
+}
+int Add_elem(int Pos, int Val, List **First)
+{
+	List *semi = *First;
+	cout << Pos;
+	if (!First)
+	{
+		Add_to_beginning(Pos, Val, First);
+		return 0;
+	}
+	if (Pos == 1)
+	{
+		Add_to_beginning(Pos, Val, First);
+		return 0;
+	}
+
+	while ((semi) && (Pos > semi->data_of_el.Pos))
+	{
+		semi = semi->next;
+	}
+	if (!semi)
+	{
+		Add_to_end(Pos, Val, First);
+		return 0;
+	}
+	Add_between(Pos, Val, First);
+	return 0;
+}
+int main()
+{
+	setlocale(LC_ALL, "Russian");
+	int Pos, Val;
+	char op;
+	List* First = 0;
+	do
+	{
+		
+		cin.clear();
+		_flushall();
+		cin >> (op);
+		switch (op)
+		{
+		case '+': cout << "Enter Position of new element\n";
+			cin >> (Pos);
+			if (Pos <= 0)
+			{
+				cout << "Position can not be unpositive\n";
+				break;
+			}
+			cout << "Enter Value of new element\n";
+			cin >> (Val);
+			Add_elem(Pos, Val, &First);
+
+			break;
+		case '=':
+			ShowList(&First);
+			break;
+		case '-':
+			Delete_el(Pos, &First);
+			break;
+		}
+	} while (op != 0);
+	return 0;
+}

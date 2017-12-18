@@ -45,9 +45,9 @@ void add_to_end(node_t * & head , int value)
 }
 void delete_first(node_t * & head)
 {
-	node_t *time = head; // указатель 
+	node_t *time = head;
 	head = head->next;
-	delete time; // т.к указатель , то при удалении удалиться и сам "элемент"
+	delete time; 
 }
 void print(node_t * head) {
 	node_t *p;

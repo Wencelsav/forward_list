@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include <sstream>
 #include<iostream>
 #include <utility>
@@ -97,6 +96,7 @@ int main()
 		if (op == 'q') {
 			break;
 		}
+		
 		switch (op) {
 		case '+':
 			add_to_end(head, value);
@@ -111,6 +111,7 @@ int main()
 			reverse(head);
 			break;
 		}
+		print (head);
 	}
 	return 0;
 }
